@@ -44,10 +44,14 @@
  * console.log(myAccount(50)); // "You deposited 50 to your Saving Account and the current balance is 150."
  */
 
-function accountGenerator(accountName, initBalance) {
-  // Your implementation here
-}
+function accountGenerator(type, initialBalance) {
+  let balance = initialBalance;
 
+  return function (amount) {
+    balance += amount;
+    return `You deposited ${amount} to your ${type} Account and the current balance is ${balance}.`;
+  };
+}
 /**
  * Exercise 2: Distributing Tips
  *
@@ -67,8 +71,19 @@ function accountGenerator(accountName, initBalance) {
  * @return {object} An object with the total tips for `food` and `drink`.
  */
 
-function distributeTips(...args) {
-  // Your implementation here
+function distributeTips(...tips) {
+  let food = 0;
+  let drink = 0;
+
+  for (let i = 0; i < tips.length; i++) {
+    if (i % 2 === 0) {
+      food += tips[i];
+    } else {
+      drink += tips[i];
+    }
+  }
+
+  return { food, drink };
 }
 
 /**
@@ -98,8 +113,11 @@ function distributeTips(...args) {
  * @return {Function} A new function that takes a name and an optional greeting to create a greeting message.
  */
 
-function greetingGenerator(defaultGreeting = "Hello") {
-  // Your implementation here
+function greetingGenerator(greeting = "Hello") {
+  return function (name, customGreeting) {
+    const finalGreeting = customGreeting !== undefined ? customGreeting : greeting;
+    return `${finalGreeting}, ${name}!`;
+  };
 }
 
 /**
@@ -121,10 +139,15 @@ function greetingGenerator(defaultGreeting = "Hello") {
  * @return {Object} An object with properties `first`, `second`, and `remaining`.
  */
 
-function mergeAndExtract(array1, array2) {
-  // Your implementation here
-}
+function mergeAndExtract(arr1, arr2) {
+  const merged = arr1.concat(arr2);
 
+  return {
+    first: merged[0],
+    second: merged[1],
+    remaining: merged.slice(2),
+  };
+}
 /**
  * Exercise 5: Alternating Harmonic Series Calculation
  *
@@ -150,16 +173,21 @@ function mergeAndExtract(array1, array2) {
  * @param {number} index - The current index for tail recursion, initial call should pass 1.
  * @return {number} The sum of the alternating harmonic series up to n terms.
  */
-
 function calculateAlternatingHarmonic(n, accumulator = 0, index = 1) {
-  // Your implementation here
-}
+  if (index > n) {
+    return accumulator;
+  }
 
-// Export the function for testing
+  if (index % 2 === 1) {
+    return calculateAlternatingHarmonic(n, accumulator + 1 / index, index + 1);
+  } else {
+    return calculateAlternatingHarmonic(n, accumulator - 1 / index, index + 1);
+  }
+}
 module.exports = {
   accountGenerator,
-  distributeTips,
-  greetingGenerator,
   mergeAndExtract,
+  greetingGenerator,
   calculateAlternatingHarmonic,
+  distributeTips,
 };
